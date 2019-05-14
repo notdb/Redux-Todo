@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import { addTodo } from "../actions/";
 class Todo extends React.Component {
   state = {
     newTodo: ""
@@ -8,6 +8,11 @@ class Todo extends React.Component {
 
   handleChanges = e => {
     this.setState({ newTodo: e.target.value });
+  };
+
+  addTodo = e => {
+    e.preventDefault();
+    this.props.addTodo(this.state.newTodo);
   };
 
   render() {
@@ -21,7 +26,7 @@ class Todo extends React.Component {
             value={this.state.newTodo}
             onChange={this.handleChanges}
           />
-          <button>Add todo</button>
+          <button onClick={this.addTodo}>Add todo</button>
         </div>
         <div className="todo-list">
           <p>a</p>
@@ -42,5 +47,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {}
+  { addTodo }
 )(Todo);
