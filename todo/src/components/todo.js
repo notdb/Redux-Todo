@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { addTodo } from "../actions/";
+import { addTodo, toggleTodo } from "../actions/";
 class Todo extends React.Component {
   state = {
     newTodo: ""
@@ -13,6 +13,11 @@ class Todo extends React.Component {
   addTodo = e => {
     e.preventDefault();
     this.props.addTodo(this.state.newTodo);
+  };
+
+  toggleMe = todo => {
+    console.log(todo);
+    this.props.toggleTodo(todo);
   };
 
   render() {
@@ -29,10 +34,31 @@ class Todo extends React.Component {
           <button onClick={this.addTodo}>Add todo</button>
         </div>
         <div className="todo-list">
-          <p>a</p>
-          {this.props.todos.map(todo => (
-            <p>{todo.value}</p>
-          ))}
+          {this.props.todos.map(todo => {
+            if (todo.completed) {
+              return (
+                <p
+                  onClick={() => {
+                    this.toggleMe(todo.id);
+                  }}
+                  key={todo.id}
+                >
+                  {todo.value}
+                </p>
+              );
+            } else {
+              return (
+                <p
+                  onClick={() => {
+                    this.toggleMe(todo.id);
+                  }}
+                  key={todo.id}
+                >
+                  {todo.value} NOT COMPLETED
+                </p>
+              );
+            }
+          })}
         </div>
       </div>
     );
@@ -41,11 +67,12 @@ class Todo extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    title: state.title,
     todos: state.todos
   };
 };
 
 export default connect(
   mapStateToProps,
-  { addTodo }
+  { addTodo, toggleTodo }
 )(Todo);
